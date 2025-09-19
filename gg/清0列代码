@@ -14,3 +14,23 @@ df_cleaned = df.loc[:, zero_ratio <= 0.6]
 df_cleaned.to_excel('/mnt/data/Molecular_Descriptor_cleaned.xlsx', index=False)
 
 print("文件已清理并保存为'Molecular_Descriptor_cleaned.xlsx'.")
+
+
+
+
+import pandas as pd
+
+# 读取Excel文件
+file_path = '/mnt/data/Molecular_Descriptor.xlsx'  # 文件路径
+df = pd.read_excel(file_path)
+
+# 计算每列中0值的比例
+zero_ratio = (df == 0).mean()
+
+# 删除零值比例超过60%的列
+df_cleaned = df.loc[:, zero_ratio <= 0.6]
+
+# 将清理后的数据保存为新的Excel文件
+df_cleaned.to_excel('/mnt/data/Molecular_Descriptor_cleaned.xlsx', index=False)
+
+print("文件已清理并保存为'Molecular_Descriptor_cleaned.xlsx'.")
