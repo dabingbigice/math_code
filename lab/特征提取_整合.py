@@ -11,7 +11,7 @@ from 特征提取_频域 import extract_frequency_domain_features
 from 特征提取_时频域 import extract_time_frequency_features
 
 
-def proceed_features_raw(all_samples_features, file_path):
+def proceed_features_raw(file_path, all_samples_list):
     # 加载数据
     mat_data = loadmat(file_path, squeeze_me=True)
     fs = 12000  # 采样频率
@@ -34,6 +34,9 @@ def proceed_features_raw(all_samples_features, file_path):
             time_feature_dict = extract_complete_time_domain_features(filtered_signal)
             # 添加文件名称
             time_feature_dict['key'] = key
+            idx = key.find('_')
+            # 切出来DA传动轴类型数据
+            time_feature_dict['type'] = key[idx + 1:idx + 3]
             # 创建特征数据框并打印
             time_feature_df = pd.DataFrame.from_dict(time_feature_dict, orient='index').T
             print("时域特征全集提取结果:")
@@ -47,15 +50,46 @@ def proceed_features_raw(all_samples_features, file_path):
             print("时频域特征提取结果:")
             print(time_frequency_feature_df.round(6))
 
-
+            # 横向拼接三个DataFrame
             combined_features = pd.concat([time_feature_df, frequency_feature_df, time_frequency_feature_df], axis=1)
-            combined_features = combined_features.set_index('key')
-            # 将当前样本的特征添加到总DataFrame中
-            all_samples_features = pd.concat([all_samples_features, combined_features], axis=0, ignore_index=False)
+            # combined_features.set_index('key', inplace=True)
+            # 将当前样本的特征添加到列表中
+            all_samples_list.append(combined_features)
 
-        all_samples_features.to_csv('all_samples_combined_features.csv', index=[key])
+
+def get_all_file_data(root_dir):
+    import os
+
+    # 定义根目录（请替换为您电脑上的实际绝对路径，例如：C:\Users\YourName\源域数据集）
+
+    # 创建一个空列表来存储所有文件的路径
+    all_file_paths = []
+    all_samples_list = []
+
+    # 遍历根目录及其所有子文件夹
+    for foldername, subfolders, filenames in os.walk(root_dir):
+        for filename in filenames:
+            # 拼接完整路径，并添加到列表中
+            full_path = os.path.join(foldername, filename)
+            all_file_paths.append(full_path)
+
+    # 打印所有路径
+    for path in all_file_paths:
+        print(path)
+        proceed_features_raw(path, all_samples_list)
+
+    if all_samples_list:
+
+        all_samples_features = pd.concat(all_samples_list, ignore_index=False)
+        # 一次性写入所有数据
+        all_samples_features.set_index('key', inplace=True)
+        all_samples_features.to_csv('all_samples_combined_features.csv', index=True)
+        print("所有样本的特征已保存至: all_samples_combined_features.csv")
+    else:
+        print("没有找到任何时间序列数据")
 
 
 if __name__ == '__main__':
-    all_samples_features = pd.DataFrame()
-    proceed_features_raw(all_samples_features, '源域数据集/12kHz_FE_data/B/0007/B007_1.mat')
+    # all_samples_features = pd.DataFrame()
+    root_dir = "源域数据集/12kHz_DE_data/B/0007"
+    get_all_file_data(root_dir)
