@@ -11,7 +11,7 @@ plt.rcParams['font.sans-serif'] = ['SimHei']
 plt.rcParams['axes.unicode_minus'] = False
 
 
-def extract_time_frequency_features(signal_data, fs, wavelet='db4', level=5):
+def extract_time_frequency_features(signal_data, fs, wavelet='db4', level=3):
     """
     提取完整的时频域特征
 

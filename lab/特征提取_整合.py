@@ -83,13 +83,35 @@ def get_all_file_data(root_dir):
         all_samples_features = pd.concat(all_samples_list, ignore_index=False)
         # 一次性写入所有数据
         all_samples_features.set_index('key', inplace=True)
-        all_samples_features.to_csv('all_samples_combined_features.csv', index=True)
-        print("所有样本的特征已保存至: all_samples_combined_features.csv")
+        all_samples_features.to_csv(f'{root_dir}_features.csv', index=True)
+        print("所有样本的特征已保存")
     else:
         print("没有找到任何时间序列数据")
 
 
 if __name__ == '__main__':
+    # 12kHz_DE_data
     # all_samples_features = pd.DataFrame()
-    root_dir = "源域数据集/12kHz_DE_data/B/0007"
-    get_all_file_data(root_dir)
+    # _12kHz_DE_data_B = "源域数据集/12kHz_DE_data/B"
+    # get_all_file_data(_12kHz_DE_data_B)
+    # _12kHz_DE_data_IR = "源域数据集/12kHz_DE_data/IR"
+    # get_all_file_data(_12kHz_DE_data_IR)
+    # _12kHz_DE_data_OR = "源域数据集/12kHz_DE_data/OR"
+    # get_all_file_data(_12kHz_DE_data_OR)
+
+    # _12kHz_FE_data_B = "源域数据集/12kHz_FE_data/B"
+    # get_all_file_data(_12kHz_FE_data_B)
+    # _12kHz_FE_data_IR = "源域数据集/12kHz_FE_data/IR"
+    # get_all_file_data(_12kHz_FE_data_IR)
+    # _12kHz_FE_data_OR = "源域数据集/12kHz_FE_data/OR"
+    # get_all_file_data(_12kHz_FE_data_OR)
+
+    # _48kHz_DE_data_B = "源域数据集/48kHz_DE_data/B"
+    # get_all_file_data(_48kHz_DE_data_B)
+    # _48kHz_DE_data_IR = "源域数据集/48kHz_DE_data/IR"
+    # get_all_file_data(_48kHz_DE_data_IR)
+    # _48kHz_DE_data_OR = "源域数据集/48kHz_DE_data/OR"
+    # get_all_file_data(_48kHz_DE_data_OR)
+
+    _48kHz_Normal_data = "源域数据集/48kHz_Normal_data"
+    get_all_file_data(_48kHz_Normal_data)
